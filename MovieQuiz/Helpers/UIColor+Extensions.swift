@@ -6,7 +6,5 @@ extension UIColor {
     static var ypBlack = UIColor(named: "YP Black (iOS)") ?? UIColor.black
     static var ypWhite = UIColor(named: "YP White (iOS)") ?? UIColor.white
     static var ypGray = UIColor(named: "YP Gray (iOS)") ?? UIColor.gray
-    static var ypBackGround = UIColor(named: "YP BackGroundColor (iOS)") ?? UIColor.darkGray
-    
-    
+    static var ypBackGround = UIColor(named: "YP BackGroundColor (iOS)") ?? UIColor.darkGray   
 }

@@ -63,6 +63,8 @@ final class MovieQuizViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         show(quiz: convert(model: questions[currentQuestionIndex]))
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 20
     }
     
     @IBAction private func noButtonClicked(_ sender: Any) {
@@ -100,9 +102,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showAnswerResult(isCorrect: Bool) {
-        imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 10
-        imageView.layer.cornerRadius = 6
         imageView.layer.borderColor = isCorrect ?  UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         buttonsStackView.isUserInteractionEnabled = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
