@@ -1,0 +1,5 @@
+
+protocol QuestionFactoryProtocol {
+    func requestNextQuestion()
+}
+
