@@ -75,7 +75,7 @@ extension StatisticService: StatisticServiceProtocol {
         totalQuestionsCount += amount
         let oldBest = bestGame
         let newResult = GameResult (correct: count, total: amount, date: Date())
-        bestGame = newResult.isBestGame(newGame: newResult) ? newResult : oldBest
+        bestGame = newResult.isBestGame(bestGame: oldBest) ? newResult : oldBest
     }
 }
 
