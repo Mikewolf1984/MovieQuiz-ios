@@ -1,5 +1,5 @@
-
 import UIKit
+
 class AlertPresenter: AlertPresenterProtocol {
     var delegate: AlertPresenterDelegate?
     
@@ -9,17 +9,13 @@ class AlertPresenter: AlertPresenterProtocol {
             message: alertModel.message,
             preferredStyle: .alert
         )
-        let action = UIAlertAction(title: alertModel.buttonText, style: .default) {
-            [weak self] _ in if let _self = self {
-                _self.delegate?.alertPresenterDidPresent()
-            } else {
-                return
-            }
+        let action = UIAlertAction(title: alertModel.buttonText, style: .default) { _ in
+            alertModel.completion?()
         }
         alert.addAction(action)
         DispatchQueue.main.async {
-            [weak self] in if let _self =  self {
-                _self.delegate?.present(alert, animated: true)
+            [weak self] in if let self =  self {
+                self.delegate?.present(alert, animated: true)
             } else {
                 return
             }
