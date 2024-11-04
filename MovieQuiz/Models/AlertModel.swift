@@ -1,4 +1,3 @@
-
 struct AlertModel
 {
     let title: String

@@ -1,9 +1,7 @@
-
 import UIKit
 
 final class StatisticService {
     private let storage: UserDefaults = .standard
-    
     private enum Keys: String {
         case correctAnswers = "correctAnswers"
         case totalQuestions = "totalQuestions"
@@ -36,7 +34,7 @@ extension StatisticService: StatisticServiceProtocol {
     
     internal var gamesCount: Int {
         get {
-            storage.integer(forKey: Keys.gamesCount.rawValue)   // Добавьте чтение значения из UserDefaults
+            storage.integer(forKey: Keys.gamesCount.rawValue)
         }
         set {
             storage.set(newValue, forKey: Keys.gamesCount.rawValue)
@@ -48,7 +46,6 @@ extension StatisticService: StatisticServiceProtocol {
             
             let totalBest = storage.integer(forKey: Keys.totalBest.rawValue)
             let correctBest = storage.integer(forKey: Keys.correctBest.rawValue)
-            
             if let dateBest = storage.object(forKey: Keys.dateBest.rawValue) as? Date
             { return GameResult (correct: correctBest, total: totalBest, date: dateBest) }
             else { return GameResult (correct: correctBest, total: totalBest, date: Date())
