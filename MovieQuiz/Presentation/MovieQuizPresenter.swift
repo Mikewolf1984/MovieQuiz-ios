@@ -3,6 +3,8 @@ import UIKit
 final class MovieQuizPresenter {
     
     let questionsAmount: Int = 10
+    var correctAnswers: Int = 0
+    
     private var currentQuestionIndex: Int = 0
     
     internal var currentQuestion: QuizQuestion?
@@ -21,18 +23,42 @@ final class MovieQuizPresenter {
     }
     
     func yesButtonClicked() {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = true
-        viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        didAnswer(isYes: true)
     }
+    
     func noButtonClicked() {
-        guard let currentQuestion = currentQuestion else {
-            return
+        didAnswer(isYes: false)
+    }
+    
+    private func didAnswer(isYes: Bool) {
+            guard let currentQuestion = currentQuestion else {
+                return
+            }
+            
+            let givenAnswer = isYes
+            
+            viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
         }
-        let givenAnswer = false
-        viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+    
+    internal func showNextQuestionOrResults() {
+        if self.isLastQuestion() {
+            let statistics = viewController?.statistics
+            statistics?.store(correct: correctAnswers, total: questionsAmount)
+            let string1 = "Ваш результат: \(correctAnswers)/10"
+            let string2 = "Количество сыгранных квизов: \(statistics?.gamesCount ?? 0 )"
+            let string3 = "Рекорд: \(statistics?.bestGame.correct ?? 0)/\(statistics?.bestGame.total ?? 0) (\((statistics?.bestGame.date.dateTimeString ?? Date().dateTimeString)))"
+            let string4 = "Средняя точность: \(String(format: "%.2f", statistics?.totalAccuracy ?? 0)) %"
+            let viewModel = AlertModel(
+                title: "Этот раунд окончен!",
+                message: "\(string1) \n\(string2) \n\(string3) \n\(string4)",
+                buttonText: "Сыграть ещё раз"
+            ) { self.viewController?.alertPresenterDidPresent()
+            }
+            viewController?.showResult(quiz: viewModel) }
+        else {
+            self.switchToNextQuestion()
+            viewController?.questionFactory?.requestNextQuestion()
+        }
     }
     
     
@@ -41,6 +67,17 @@ final class MovieQuizPresenter {
                                             question: model.text,
                                             questionNumber: String(currentQuestionIndex+1)+"/"+String(questionsAmount))
         return output
+    }
+    
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.show(quiz: viewModel)
+        }
     }
     
 }
