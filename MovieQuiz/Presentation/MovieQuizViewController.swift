@@ -1,13 +1,14 @@
 import UIKit
 
-    final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
     
     private let presenter =  MovieQuizPresenter ()
     
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
+    
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
-   
+    
     private var correctAnswers = 0
     private var statistics: StatisticServiceProtocol?
     
@@ -19,35 +20,24 @@ import UIKit
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter.viewController = self
         statistics = StatisticService()
         imageView.layer.cornerRadius = 20
         showLoadingIndicator()
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
+        
     }
     
-    @IBAction private func noButtonClicked(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        if !currentQuestion.correctAnswer {
-            correctAnswers += 1
-            showAnswerResult(isCorrect: true)
-        } else {
-            showAnswerResult(isCorrect: false)
-        }
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
+        presenter.currentQuestion = currentQuestion
+        presenter.noButtonClicked()
     }
     
-    @IBAction private func yesButtonClicked(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        if currentQuestion.correctAnswer {
-            correctAnswers += 1
-            showAnswerResult(isCorrect: true)
-        } else {
-            showAnswerResult(isCorrect: false)
-        }
+    
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
+        presenter.currentQuestion = currentQuestion
+        presenter.yesButtonClicked()
     }
     
     func alertPresenterDidPresent() {
@@ -123,7 +113,9 @@ import UIKit
         }
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+    internal func showAnswerResult(isCorrect: Bool) {
+        
+        isCorrect ? correctAnswers += 1 : nil
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ?  UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         buttonsStackView.isUserInteractionEnabled = false
