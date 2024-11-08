@@ -1,9 +1,3 @@
-//
-//  MovieQuizTests.swift
-//  MovieQuizTests
-//
-//  Created by Михаил Волков on 04.11.2024.
-//
 
 import XCTest
 

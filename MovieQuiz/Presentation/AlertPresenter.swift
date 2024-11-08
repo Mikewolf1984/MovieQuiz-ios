@@ -13,6 +13,7 @@ class AlertPresenter: AlertPresenterProtocol {
             alertModel.completion?()
         }
         alert.addAction(action)
+        alert.view.accessibilityIdentifier = "finalOrErrorAlert"
         DispatchQueue.main.async {
             [weak self] in if let self =  self {
                 self.delegate?.present(alert, animated: true)
