@@ -1,12 +1,13 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
+    final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
+    
+    private let presenter =  MovieQuizPresenter ()
     
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
-    private let questionsAmount: Int = 10
-    private var currentQuestionIndex = 0
+   
     private var correctAnswers = 0
     private var statistics: StatisticServiceProtocol?
     
@@ -50,7 +51,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     func alertPresenterDidPresent() {
-        currentQuestionIndex = 0
+        presenter.resetQuestionIndex()
         correctAnswers = 0
         questionFactory?.requestNextQuestion()
     }
@@ -69,7 +70,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             return
         }
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
@@ -103,8 +104,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questionsAmount - 1 {
-            statistics?.store(correct: correctAnswers, total: questionsAmount)
+        if presenter.isLastQuestion() {
+            statistics?.store(correct: correctAnswers, total: presenter.questionsAmount)
             let string1 = "Ваш результат: \(correctAnswers)/10"
             let string2 = "Количество сыгранных квизов: \(statistics?.gamesCount ?? 0 )"
             let string3 = "Рекорд: \(statistics?.bestGame.correct ?? 0)/\(statistics?.bestGame.total ?? 0) (\((statistics?.bestGame.date.dateTimeString ?? Date().dateTimeString)))"
@@ -117,7 +118,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             }
             showResult(quiz: viewModel) }
         else {
-            currentQuestionIndex += 1
+            presenter.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
         }
     }
@@ -133,12 +134,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         }
     }
     
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let output = QuizStepViewModel.init(image: UIImage(data: model.image) ?? UIImage(),
-                                            question: model.text,
-                                            questionNumber: String(currentQuestionIndex+1)+"/"+String(questionsAmount))
-        return output
-    }
+    
     
     private func show(quiz step: QuizStepViewModel) {
         self.hideLoadingIndicator()
