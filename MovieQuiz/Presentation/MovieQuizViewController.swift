@@ -26,28 +26,28 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         presenter.yesButtonClicked()
     }
     
-    internal func didReceiveNextQuestion(question: QuizQuestion?) {
+     func didReceiveNextQuestion(question: QuizQuestion?) {
         presenter.didReceiveNextQuestion(question: question)
     }
     
-    internal func alertPresenterDidPresent() {
+     func alertPresenterDidPresent() {
         presenter.restartGame()
         presenter.questionFactory?.requestNextQuestion()
     }
     
-    internal func showLoadingIndicator() {
+     func showLoadingIndicator() {
         DispatchQueue.main.async {
             self.activityIndicator.isHidden = false
             self.activityIndicator.startAnimating()
         }
     }
     
-    internal func hideLoadingIndicator() {
+     func hideLoadingIndicator() {
         DispatchQueue.main.async {
             self.activityIndicator.isHidden = true
         }
     }
-    internal func showNetworkError(message: String) {
+     func showNetworkError(message: String) {
         hideLoadingIndicator()
         let model = AlertModel(title: "Ошибка",
                                message: message,
@@ -62,7 +62,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         alertPresenter.showAlert(with: model)
     }
     
-    internal func highlightImageBorder(isCorrect: Bool) {
+     func highlightImageBorder(isCorrect: Bool) {
         
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ?  UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
@@ -79,7 +79,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         textLabel.text = step.question
     }
     
-    internal func showResult(quiz result: AlertModel) {
+     func showResult(quiz result: AlertModel) {
         let alertPresenter = AlertPresenter()
         alertPresenter.delegate = self
         self.alertPresenter = alertPresenter

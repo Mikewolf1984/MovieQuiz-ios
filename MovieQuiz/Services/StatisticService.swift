@@ -14,7 +14,7 @@ final class StatisticService {
 
 extension StatisticService: StatisticServiceProtocol {
     
-    internal var totalQuestionsCount: Int {
+     var totalQuestionsCount: Int {
         get {
             storage.integer(forKey: Keys.totalQuestions.rawValue)
         }
@@ -23,7 +23,7 @@ extension StatisticService: StatisticServiceProtocol {
         }
     }
     
-    internal var correctAnswersCount: Int {
+     var correctAnswersCount: Int {
         get {
             storage.integer(forKey: Keys.correctAnswers.rawValue)
         }
@@ -32,7 +32,7 @@ extension StatisticService: StatisticServiceProtocol {
         }
     }
     
-    internal var gamesCount: Int {
+     var gamesCount: Int {
         get {
             storage.integer(forKey: Keys.gamesCount.rawValue)
         }
@@ -41,7 +41,7 @@ extension StatisticService: StatisticServiceProtocol {
         }
     }
     
-    internal var bestGame: GameResult {
+     var bestGame: GameResult {
         get {
             
             let totalBest = storage.integer(forKey: Keys.totalBest.rawValue)
@@ -58,7 +58,7 @@ extension StatisticService: StatisticServiceProtocol {
         }
     }
     
-    internal var totalAccuracy: Double {
+     var totalAccuracy: Double {
         if gamesCount != 0 {
             return (Double(correctAnswersCount) / Double((totalQuestionsCount)))*100
         } else {

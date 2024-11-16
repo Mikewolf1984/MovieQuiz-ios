@@ -3,7 +3,7 @@ import UIKit
 final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     private weak var viewController: MovieQuizViewControllerProtocol?
-    internal var questionFactory: QuestionFactoryProtocol?
+     var questionFactory: QuestionFactoryProtocol?
     private var statistics: StatisticServiceProtocol!
     private let questionsAmount: Int = 10
     private var correctAnswers: Int = 0
@@ -18,12 +18,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         statistics = StatisticService()
     }
     
-    internal func didLoadDataFromServer() {
+     func didLoadDataFromServer() {
         viewController?.hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
     
-    internal func didFailToLoadData(with error: Error) {
+     func didFailToLoadData(with error: Error) {
         viewController?.showNetworkError(message: error.localizedDescription)
     }
     
@@ -31,7 +31,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         currentQuestionIndex == questionsAmount - 1
     }
     
-    internal func restartGame() {
+     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
     }
@@ -40,11 +40,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         currentQuestionIndex += 1
     }
     
-    internal func yesButtonClicked() {
+     func yesButtonClicked() {
         didAnswer(isYes: true)
     }
     
-    internal func noButtonClicked() {
+     func noButtonClicked() {
         didAnswer(isYes: false)
     }
     
@@ -56,7 +56,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
-    internal func showNextQuestionOrResults() {
+     func showNextQuestionOrResults() {
         if self.isLastQuestion() {
             if let statistics = statistics {
                 statistics.store(correct: correctAnswers, total: questionsAmount) }
@@ -77,14 +77,14 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
-    internal func convert(model: QuizQuestion) -> QuizStepViewModel {
+     func convert(model: QuizQuestion) -> QuizStepViewModel {
         let output = QuizStepViewModel.init(image: UIImage(data: model.image) ?? UIImage(),
                                             question: model.text,
                                             questionNumber: String(currentQuestionIndex+1)+"/"+String(questionsAmount))
         return output
     }
     
-    internal func didReceiveNextQuestion(question: QuizQuestion?) {
+     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
         }
@@ -95,11 +95,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
-    internal func didAnswer(isCorrectAnswer: Bool) {
+     func didAnswer(isCorrectAnswer: Bool) {
         isCorrectAnswer ? correctAnswers += 1 : nil
     }
     
-    internal func showAnswerResult(isCorrect: Bool) {
+     func showAnswerResult(isCorrect: Bool) {
         didAnswer(isCorrectAnswer: isCorrect)
         viewController?.highlightImageBorder(isCorrect: isCorrect)
         
