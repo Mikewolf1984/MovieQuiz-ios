@@ -57,20 +57,21 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
      func showNextQuestionOrResults() {
-        if self.isLastQuestion() {
-            if let statistics = statistics {
-                statistics.store(correct: correctAnswers, total: questionsAmount) }
-            let string1 = "Ваш результат: \(correctAnswers)/10"
-            let string2 = "Количество сыгранных квизов: \(statistics?.gamesCount ?? 0 )"
-            let string3 = "Рекорд: \(statistics?.bestGame.correct ?? 0)/\(statistics?.bestGame.total ?? 0) (\((statistics?.bestGame.date.dateTimeString ?? Date().dateTimeString)))"
-            let string4 = "Средняя точность: \(String(format: "%.2f", statistics?.totalAccuracy ?? 0)) %"
-            let viewModel = AlertModel(
+         if self.isLastQuestion() {
+             if let statistics = statistics {
+                 statistics.store(correct: correctAnswers, total: questionsAmount) }
+             let string1 = "Ваш результат: \(correctAnswers)/10"
+             let string2 = "Количество сыгранных квизов: \(statistics?.gamesCount ?? 0 )"
+             let string3 = "Рекорд: \(statistics?.bestGame.correct ?? 0)/\(statistics?.bestGame.total ?? 0) (\((statistics?.bestGame.date.dateTimeString ?? Date().dateTimeString)))"
+             let string4 = "Средняя точность: \(String(format: "%.2f", statistics?.totalAccuracy ?? 0)) %"
+             let viewModel = AlertModel(
                 title: "Этот раунд окончен!",
                 message: "\(string1) \n\(string2) \n\(string3) \n\(string4)",
                 buttonText: "Сыграть ещё раз"
-            ) { self.viewController?.alertPresenterDidPresent()
-            }
-            viewController?.showResult(quiz: viewModel) }
+             ) { self.viewController?.alertPresenterDidPresent()
+             }
+             viewController?.showResult(quiz: viewModel)
+         }
         else {
             self.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
