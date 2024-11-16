@@ -1,0 +1,44 @@
+{
+  "configurations" : [
+    {
+      "id" : "9DCB62E7-BA74-40D8-9BEB-7095EBEADD43",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "MovieQuizTests"
+      ],
+      "target" : {
+        "containerPath" : "container:MovieQuiz.xcodeproj",
+        "identifier" : "4AE9A72D2CD920C0008A5331",
+        "name" : "MovieQuizTests"
+      }
+    },
+    {
+      "skippedTests" : [
+        "MovieQuizUITests\/testLaunchPerformance()"
+      ],
+      "target" : {
+        "containerPath" : "container:MovieQuiz.xcodeproj",
+        "identifier" : "4A1F72802CDE80050029FBDB",
+        "name" : "MovieQuizUITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:MovieQuiz.xcodeproj",
+        "identifier" : "4AD062092CDF8D4800EEBA36",
+        "name" : "MovieQuizPresenterTests"
+      }
+    }
+  ],
+  "version" : 1
+}
